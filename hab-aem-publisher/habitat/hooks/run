@@ -1,0 +1,13 @@
+#!/bin/bash
+
+exec 2>&1
+
+echo "Starting AEM Publisher"
+
+if path={{pkgPathFor "core/jdk8"}}; then
+  export JAVA_HOME=$path
+elif path={{pkgPathFor "core/jdk7"}}; then
+  export JAVA_HOME=$path
+fi
+
+$JAVA_HOME/bin/java -Xms2048M -Xmx4096M -jar {{pkg.path}}/AEM_6.3_Quickstart.jar -r publish
