@@ -2,14 +2,10 @@
 
 exec 2>&1
 
-echo "Starting AEM Publisher"
+echo "Starting AEM Author"
 
-if path={{pkgPathFor "core/jdk8"}}; then
-  export JAVA_HOME=$path
-elif path={{pkgPathFor "core/jdk7"}}; then
-  export JAVA_HOME=$path
-fi
+export JAVA_HOME={{pkgPathFor "core/jdk8"}}
 
-cd {{pkg.path}}
+cd {{pkg.svc_var_path}}
 
-$JAVA_HOME/bin/java -Xms2048M -Xmx4096M -jar {{pkg.path}}/AEM_6.3_Quickstart.jar -r author
+$JAVA_HOME/bin/java -Xms2048M -Xmx4096M -jar {{pkgPathFor "andy-dufour/aem-base"}}/AEM_6.3_Quickstart.jar -r author
