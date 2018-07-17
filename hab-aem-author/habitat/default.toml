@@ -4,7 +4,16 @@
 
 
 [aem]
-opts = "-r author -p 4503"
+[aem.author]
+port = 4503
+opts = "-r author"
+username = "admin"
+password = "admin"
+
+[aem.license]
+customer_name = "PITNEY BOWES, INC."
+product_version = "6.2.0"
+download_id = "a623014f-de74-714c-9ab3-480547c04a4d"
 
 [java]
 opts = "-Xms2048M -Xmx4096M"

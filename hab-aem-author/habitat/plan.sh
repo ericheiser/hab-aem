@@ -1,4 +1,4 @@
-pkg_name=hab-aem-author
+pkg_name=aem-author
 pkg_origin=andy-dufour
 pkg_version="6.3.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
@@ -15,7 +15,9 @@ pkg_build_deps=(core/jdk8)
 # pkg_svc_run="haproxy -f $pkg_svc_config_path/haproxy.conf"
 pkg_exports=(
 #   [host]=srv.address
-  [port]=4502
+  [port]=aem.author.port
+  [username]=aem.author.username
+  [password]=aem.author.password
 #   [ssl-port]=srv.ssl.port
 )
 # pkg_exposes=(port ssl-port)

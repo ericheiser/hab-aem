@@ -6,7 +6,7 @@ pkg_license=("Apache-2.0")
 # pkg_source="http://nexus.inlet-delivery.com/repository/inlet-http/AEM_6.3_Quickstart.jar"
 # pkg_filename="${pkg_name}-${pkg_version}.tar.gz"
 pkg_shasum="f053cf0f4bd6627f4ce36faec1458192f70f0b8d0c36cbce9d763feef4259c11"
-pkg_deps=(andy-dufour/aem-base)
+pkg_deps=(andy-dufour/aem-base core/curl core/jdk8)
 pkg_build_deps=(core/jdk8)
 # pkg_lib_dirs=(lib)
 # pkg_include_dirs=(include)
@@ -19,9 +19,9 @@ pkg_exports=(
 #   [ssl-port]=srv.ssl.port
 )
 # pkg_exposes=(port ssl-port)
-# pkg_binds=(
-#   [database]="port host"
-# )
+pkg_binds=(
+  [author]="port username password"
+)
 # pkg_binds_optional=(
 #   [storage]="port host"
 # )

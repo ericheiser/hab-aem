@@ -1,0 +1,5 @@
+#!/bin/bash
+
+exec 2>&1
+
+cp {{pkg.svc_config_path}}/license.properties {{pkg.svc_var_path}}/license.properties

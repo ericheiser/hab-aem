@@ -1,0 +1,55 @@
+#!/bin/bash
+
+{{~ #if bind.author}}
+  {{~ #eachAlive bind.author.members as |member|}}
+    {{~ #if @first}}
+AEM_AUTHOR_SERVICE_HOST="{{member.sys.ip}}"
+AEM_AUTHOR_SERVICE_PORT="{{member.cfg.port}}"
+AEM_AUTHOR_USER="{{member.cfg.username}}"
+AEM_AUTHOR_PW="{{member.cfg.password}}"
+    {{~ /if}}
+  {{~ /eachAlive}}
+{{~ /if}}
+
+baseUrl="http://localhost:{{cfg.aem.publish.port}}"
+password="${AEM_AUTHOR_USER}:${AEM_AUTHOR_PW}"
+PACKAGE_REPO="http://nexus.inlet-delivery.com/repository/inlet-http"
+
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" $baseUrl/libs/granite/core/content/login.html)
+echo "Waiting for AEM to come up, current status $STATUS"
+
+while sleep 5
+do
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" $baseUrl/libs/granite/core/content/login.html)
+  echo "Waiting for AEM to come up, current status $STATUS"
+  if [ "$STATUS" -eq "200" ]; then break; fi
+done
+
+AUTHOR=http://${AEM_AUTHOR_SERVICE_HOST}:${AEM_AUTHOR_SERVICE_PORT}
+
+POD_IP={{sys.ip}}
+
+RA_TITLE=${POD_IP//./-}
+echo "Creating replication agent on author ${AUTHOR} named ${RA_TITLE}"
+
+curl --user $password ${AUTHOR}/bin/wcmcommand \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' --data \
+  "cmd=createPage&_charset_=utf-8&parentPath=/etc/replication/agents.author&title=${RA_TITLE}&label=&template=/libs/cq/replication/templates/agent"
+
+DATA="jcr:title=${RA_TITLE}& \
+  jcr:description='Agent that replicates to publish instance ${POD_IP}.'& \
+  enabled=true& \
+  retryDelay=60001& \
+  transportUri=http://${POD_IP}:{{cfg.aem.port}}/bin/receive?sling:authRequestLogin=1& \
+  transportUser=${AEM_AUTHOR_USER}& \
+  transportPassword=${AEM_AUTHOR_PW}"
+
+curl --user $password \
+"${AUTHOR}/etc/replication/agents.author/${RA_TITLE}/jcr:content" \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  --data "${DATA}"
+
+echo "checking agent"
+curl ${AUTHOR}/etc/replication/agents.author/${RA_TITLE}/jcr:content.json --user $password
+
+echo "Joining AEM logs"

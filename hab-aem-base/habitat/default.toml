@@ -1,3 +1,9 @@
 # Use this file to templatize your application's native configuration files.
 # See the docs at https://www.habitat.sh/docs/create-packages-configure/.
 # You can safely delete this file if you don't need it.
+
+[aem]
+[license]
+customer_name = "PITNEY BOWES, INC."
+product_version = "6.2.0"
+download_id = "a623014f-de74-714c-9ab3-480547c04a4d"
