@@ -1,3 +1,10 @@
 # Use this file to templatize your application's native configuration files.
 # See the docs at https://www.habitat.sh/docs/create-packages-configure/.
 # You can safely delete this file if you don't need it.
+
+
+[aem]
+opts = "-r publish -p 4502"
+
+[java]
+opts = "-Xms2048M -Xmx2048M"
