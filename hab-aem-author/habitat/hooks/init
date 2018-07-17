@@ -3,3 +3,9 @@
 exec 2>&1
 
 cp {{pkg.svc_config_path}}/license.properties {{pkg.svc_var_path}}/license.properties
+
+cp {{pkgPathFor "dorf/aem-base"}}/AEM_6.3_Quickstart.jar {{pkg.svc_var_path}}/AEM_6.3_Quickstart.jar
+
+cd {{pkg.svc_var_path}}
+
+java -jar AEM_6.3_Quickstart.jar -unpack

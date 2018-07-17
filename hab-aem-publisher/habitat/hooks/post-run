@@ -15,17 +15,29 @@ baseUrl="http://localhost:{{cfg.aem.publish.port}}"
 password="${AEM_AUTHOR_USER}:${AEM_AUTHOR_PW}"
 PACKAGE_REPO="http://nexus.inlet-delivery.com/repository/inlet-http"
 
+AUTHOR=http://${AEM_AUTHOR_SERVICE_HOST}:${AEM_AUTHOR_SERVICE_PORT}
+
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${AUTHOR}/libs/granite/core/content/login.html)
+echo "Waiting for AEM Author to come up, current status $STATUS"
+
+while sleep 5
+do
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${AUTHOR}/libs/granite/core/content/login.html)
+  echo "Waiting for AEM Author to come up, current status $STATUS"
+  if [ "$STATUS" -eq "200" ]; then break; fi
+done
+
+echo "AEM Author Up with Status: ${STATUS}"
+
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" $baseUrl/libs/granite/core/content/login.html)
-echo "Waiting for AEM to come up, current status $STATUS"
+echo "Waiting for AEM Publisher to come up, current status $STATUS"
 
 while sleep 5
 do
   STATUS=$(curl -s -o /dev/null -w "%{http_code}" $baseUrl/libs/granite/core/content/login.html)
-  echo "Waiting for AEM to come up, current status $STATUS"
+  echo "Waiting for AEM Publisher to come up, current status $STATUS"
   if [ "$STATUS" -eq "200" ]; then break; fi
 done
-
-AUTHOR=http://${AEM_AUTHOR_SERVICE_HOST}:${AEM_AUTHOR_SERVICE_PORT}
 
 POD_IP={{sys.ip}}
 
