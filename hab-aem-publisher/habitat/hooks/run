@@ -8,4 +8,4 @@ export JAVA_HOME={{pkgPathFor "core/jdk8"}}
 
 cd {{pkg.svc_var_path}}
 
-$JAVA_HOME/bin/java {{cfg.java.opts}} -jar {{pkgPathFor "andy-dufour/aem-base"}}/AEM_6.3_Quickstart.jar {{cfg.aem.publish.opts}} -p {{cfg.aem.publish.port}}
+$JAVA_HOME/bin/java {{cfg.java.opts}} -jar AEM_6.3_Quickstart.jar {{cfg.aem.publish.opts}} -p {{cfg.aem.publish.port}} -nofork -v

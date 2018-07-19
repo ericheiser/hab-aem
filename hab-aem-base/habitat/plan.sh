@@ -46,7 +46,4 @@ do_configure() {
 do_install() {
   cp ${HAB_CACHE_SRC_PATH}/AEM_6.3_Quickstart.jar ${pkg_prefix}/
   cd ${pkg_prefix}
-  java -jar AEM_6.3_Quickstart.jar -unpack
-  mkdir crx-quickstart/install
-  cp ${PLAN_CONTEXT}/config/org.apache.sling.commons.log.LogManager.config ${pkg_prefix}/crx-quickstart/install/
 }
