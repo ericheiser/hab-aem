@@ -53,6 +53,12 @@ resource "aws_instance" "author" {
       name = "${var.origin}/aem-author"
     }
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E hab svc load ${var.origin}/comp-pkg --bind author:aem-author.default --channel ${var.channel} -u ${var.depot_url} -s at-once"
+    ]
+  }
 }
 
 ////////////////////////////////

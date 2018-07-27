@@ -1,0 +1,35 @@
+#!/bin/bash
+
+##
+#
+# AEM_FILE : Environment variable for the file to be uploaded.
+#
+# AEM_AUTHOR_URL : The address of the author AEM instance.
+#
+# AEM_CREDENTIALS : The username:password credentials for the AEM instance.
+#
+
+{{~ #if bind.author}}
+  {{~ #eachAlive bind.author.members as |member|}}
+    {{~ #if @first}}
+AEM_AUTHOR_SERVICE_HOST="{{member.sys.ip}}"
+AEM_AUTHOR_SERVICE_PORT="{{member.cfg.port}}"
+AEM_AUTHOR_USER="{{member.cfg.username}}"
+AEM_AUTHOR_PW="{{member.cfg.password}}"
+    {{~ /if}}
+  {{~ /eachAlive}}
+{{~ /if}}
+
+AEM_FILE="{{pkg.path}}/inlet-navigator-aem-DEV.zip"
+AEM_AUTHOR_URL="${AEM_AUTHOR_SERVICE_HOST}:${AEM_AUTHOR_SERVICE_PORT}"
+AEM_CREDENTIALS="${AEM_AUTHOR_USER}:${AEM_AUTHOR_PW}"
+
+echo "Applying package: ${AEM_FILE} to ${AEM_AUTHOR_URL}"
+curl --user "${AEM_CREDENTIALS}" -F file=@"$AEM_FILE" -F name="$AEM_FILE" -F force=true -F install=true ${AEM_AUTHOR_URL}/crx/packmgr/service.jsp
+
+while sleep 60
+do
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${AEM_AUTHOR_URL}/libs/granite/core/content/login.html)
+  echo "Waiting for AEM (${AEM_AUTHOR_URL}/libs/granite/core/content/login.html) to come up, current status $STATUS"
+  if [ "$STATUS" -eq "200" ]; then break; fi
+done
