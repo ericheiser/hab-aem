@@ -2,8 +2,16 @@
 
 ## Description
 
-Provide a brief description of the `hab-aem-publisher` plan / purpose.
+The successful build will produce an artifact that installs and configures AEM Author. This build is dependent on the AEM Base artifict that should have been previously produced.
 
 ## Usage
 
-Describe the general usage for the `hab-aem-publisher` plan
+Apply the edits below to the `plan.sh` file.
+* `pkg_origin` should to your origin
+
+Apply any necessary edits to the `default.toml` file.
+
+Apply the edits below to the `/hooks/init` file.
+* Correct any origin references to reflect your origin customer_name
+
+Execute a `build` from within the hab-aem-author directory.
