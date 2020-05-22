@@ -50,7 +50,7 @@ variable "depot_url" { }
 // Tags
 //
 variable "tag_customer" {
-  default = "ford"
+  default = "customer"
 }
 
 variable "tag_project" {
